@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Ludo Roller - Alpha</string>
+    <string name="roll">Roll</string>
+    <string name="toast_text">Dice Rolled!</string>
+    <string name="initial_roll">Ready to Roll!!</string>
+    <string name="effectsText">Enable Effects</string>
+    <string name="clearTrackString">Clear</string>
+    <string name="trackRollCheck">Track Rolls</string>
+    <string name="trackButton">Track</string>
+</resources>
