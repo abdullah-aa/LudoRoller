@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
-    private val NUM_OF_SIDES = 6
+    private val numOfSides = 6
 
     private var webView : WebView? = null
     private var rollButton : Button? = null
@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
         cheerPlayer = MediaPlayer.create(baseContext, R.raw.cheer)
         awwPlayer = MediaPlayer.create(baseContext, R.raw.aww)
 
-        numberedPlayers = Array(NUM_OF_SIDES) {
+        numberedPlayers = Array(numOfSides) {
             i -> when(i) {
                 0 -> MediaPlayer.create(baseContext, R.raw.one)
                 1 -> MediaPlayer.create(baseContext, R.raw.two)
@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun rollDice() {
-        lastRoll = Dice(NUM_OF_SIDES).roll()
+        lastRoll = Dice(numOfSides).roll()
         trackButton?.visibility = View.INVISIBLE
         clearButton?.visibility = View.INVISIBLE
         rollButton?.visibility = View.INVISIBLE
