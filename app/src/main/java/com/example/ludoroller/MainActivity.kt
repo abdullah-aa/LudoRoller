@@ -4,12 +4,12 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.View
 import android.webkit.WebView
-import android.widget.Button
 import android.widget.CheckBox
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ludoroller.domain.Dice
+import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -19,10 +19,10 @@ class MainActivity : AppCompatActivity() {
     private val numOfSides = 6
 
     private var webView : WebView? = null
-    private var rollButton : Button? = null
+    private var rollButton : MaterialButton? = null
     private var effectsCheck : CheckBox? = null
-    private var clearButton : Button? = null
-    private var trackButton : Button? = null
+    private var clearButton : MaterialButton? = null
+    private var trackButton : MaterialButton? = null
     private var rollResultText : TextView? = null
     private var trackText : TextView? = null
 
