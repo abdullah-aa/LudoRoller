@@ -9,6 +9,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ludoroller.domain.Dice
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -17,6 +20,8 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
 
     private val numOfSides = 6
+
+    private var adView : AdView? = null
 
     private var webView : WebView? = null
     private var rollButton : MaterialButton? = null
@@ -37,15 +42,34 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
             setContentView(R.layout.activity_main)
 
-        webView = findViewById(R.id.rolling_view)
-        webView?.loadUrl("file:///android_asset/rolling_dice.gif")
+        setupAds()
 
+        grabTextElements()
+
+        populateWebView()
+
+        createMediaPlayers()
+
+        setupListeners()
+    }
+
+    private fun grabTextElements() {
         trackText = findViewById(R.id.textView2)
         effectsCheck = findViewById(R.id.checkBox)
         rollResultText = findViewById(R.id.textView)
+    }
 
-        createMediaPlayers()
-        setupListeners()
+    private fun populateWebView() {
+        webView = findViewById(R.id.rolling_view)
+        webView?.loadUrl("file:///android_asset/rolling_dice.gif")
+    }
+
+    private fun setupAds() {
+        MobileAds.initialize(this) {}
+
+        adView = findViewById(R.id.adView)
+        val adRequest = AdRequest.Builder().build()
+        adView?.loadAd(adRequest)
     }
 
     private fun setupListeners() {
@@ -55,7 +79,7 @@ class MainActivity : AppCompatActivity() {
         trackButton = findViewById(R.id.button2)
         trackButton?.setOnClickListener {
             if (lastRoll > 0) {
-                trackText?.text = "${trackText?.text} $lastRoll,"
+                trackText?.text = getString(R.string.uselessInterpolation, trackText?.text, lastRoll)
             }
         }
 
