@@ -1,14 +1,14 @@
-package com.example.ludoroller
+package com.beachvilletek.ludoroller
 
+import android.graphics.Color
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.View
 import android.webkit.WebView
 import android.widget.CheckBox
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.ludoroller.domain.Dice
+import com.beachvilletek.ludoroller.domain.Dice
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
@@ -25,15 +25,14 @@ class MainActivity : AppCompatActivity() {
 
     private var webView : WebView? = null
     private var rollButton : MaterialButton? = null
-    private var effectsCheck : CheckBox? = null
+    private var soundCheck : CheckBox? = null
+    private var noDelayCheck : CheckBox? = null
     private var clearButton : MaterialButton? = null
     private var trackButton : MaterialButton? = null
     private var rollResultText : TextView? = null
     private var trackText : TextView? = null
 
-    private var awwPlayer : MediaPlayer? = null
     private var rollPlayer: MediaPlayer? = null
-    private var cheerPlayer : MediaPlayer? = null
     private var numberedPlayers : Array<MediaPlayer>? = null
 
     private var lastRoll : Int = 0
@@ -55,7 +54,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun grabTextElements() {
         trackText = findViewById(R.id.textView2)
-        effectsCheck = findViewById(R.id.checkBox)
+        soundCheck = findViewById(R.id.checkBox)
+        noDelayCheck = findViewById(R.id.checkBox3)
         rollResultText = findViewById(R.id.textView)
     }
 
@@ -85,12 +85,21 @@ class MainActivity : AppCompatActivity() {
 
         clearButton = findViewById(R.id.button)
         clearButton?.setOnClickListener { trackText!!.text = "" }
+
+        noDelayCheck?.setOnClickListener {
+            if (noDelayCheck!!.isChecked) {
+                if (soundCheck!!.isChecked) {
+                    soundCheck!!.toggle()
+                }
+                soundCheck!!.isEnabled = false
+            } else {
+                soundCheck!!.isEnabled = true
+            }
+        }
     }
 
     private fun createMediaPlayers() {
         rollPlayer = MediaPlayer.create(baseContext, R.raw.dice)
-        cheerPlayer = MediaPlayer.create(baseContext, R.raw.cheer)
-        awwPlayer = MediaPlayer.create(baseContext, R.raw.aww)
 
         numberedPlayers = Array(numOfSides) {
             i -> when(i) {
@@ -107,35 +116,55 @@ class MainActivity : AppCompatActivity() {
 
     private fun rollDice() {
         lastRoll = Dice(numOfSides).roll()
-        trackButton?.visibility = View.INVISIBLE
-        clearButton?.visibility = View.INVISIBLE
-        rollButton?.visibility = View.INVISIBLE
-        webView?.visibility = View.VISIBLE
-        Toast.makeText(this, getString(R.string.toast_text), Toast.LENGTH_SHORT).show()
+        
+        if (!noDelayCheck!!.isChecked) {
+            disableAll()
+        } else {
+            rollResultText?.setTextColor(Color.RED)
+        }
 
         GlobalScope.launch {
-            rollPlayer?.start()
-            delay(timeMillis = 1500)
-
-            resultAudioPlayers()
+            if (!noDelayCheck!!.isChecked) {
+                if (soundCheck!!.isChecked) {
+                    rollPlayer?.start()
+                    delay(timeMillis = 1500)
+                    numberedPlayers!![lastRoll - 1].start()
+                } else {
+                    delay(timeMillis = 1000)
+                }
+            } else {
+                delay(timeMillis = 100)
+                rollResultText?.setTextColor(Color.GRAY)
+            }
 
             runOnUiThread {
-                trackButton?.visibility = View.VISIBLE
-                clearButton?.visibility = View.VISIBLE
-                rollButton?.visibility = View.VISIBLE
-                webView?.visibility = View.INVISIBLE
+                if (!noDelayCheck!!.isChecked) {
+                    enableAll()
+                }
                 rollResultText?.text = "$lastRoll"
             }
         }
     }
 
-    private fun resultAudioPlayers() {
-        if (effectsCheck!!.isChecked) {
-            when (lastRoll) {
-                1 -> awwPlayer?.start()
-                6 -> cheerPlayer?.start()
-            }
+    private fun enableAll() {
+        rollButton?.isEnabled = true
+        noDelayCheck?.isEnabled = true
+        trackButton?.isEnabled = true
+        clearButton?.isEnabled = true
+        if (!noDelayCheck!!.isChecked) {
+            soundCheck?.isEnabled = true
         }
-        numberedPlayers!![lastRoll - 1].start()
+
+        webView?.visibility = View.INVISIBLE
+    }
+
+    private fun disableAll() {
+        rollButton?.isEnabled = false
+        noDelayCheck?.isEnabled = false
+        trackButton?.isEnabled = false
+        clearButton?.isEnabled = false
+        soundCheck?.isEnabled = false
+
+        webView?.visibility = View.VISIBLE
     }
 }

@@ -1,4 +1,4 @@
-package com.example.ludoroller.domain
+package com.beachvilletek.ludoroller.domain
 
 class Dice (private val numSides: Int) {
 

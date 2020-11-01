@@ -1,9 +1,10 @@
 <resources>
-    <string name="app_name">Ludo Roller - Alpha</string>
+    <string name="app_name">Ludo Roller</string>
     <string name="roll">Roll</string>
     <string name="toast_text">Dice Rolled!</string>
-    <string name="initial_roll">Ready!</string>
-    <string name="effectsText">Enable Effects</string>
+    <string name="initial_roll">Go!</string>
+    <string name="effectsText">Enable Sound</string>
+    <string name="immediate">No Delay</string>:wq
     <string name="clearTrackString">Clear</string>
     <string name="trackRollCheck">Track Rolls</string>
     <string name="trackButton">Track</string>

@@ -1,4 +1,4 @@
-package com.example.ludoroller
+package com.beachvilletek.ludoroller
 
 import org.junit.Test
 
